@@ -11,16 +11,20 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader= new FXMLLoader(getClass().getResource("/Gui/FXML/MainView.fxml"));
+        FXMLLoader loader= new FXMLLoader(getClass().getResource("/Gui/FXML/MainViewScene.fxml"));
         ScrollPane scrollPane=loader.load();
 
-        scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
+        scrollPane.setFitToWidth(true);
 
         mainScene=new Scene(scrollPane);
         primaryStage.setScene(mainScene);
         primaryStage.setTitle("EX 4 banco de dados");
         primaryStage.show();
 
+    }
+
+    public static Scene getMainScene() {
+        return mainScene;
     }
 }
