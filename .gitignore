@@ -2,7 +2,7 @@
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-DB.properties
+/DB.properties
 ### Eclipse ###
 .apt_generated
 .classpath
@@ -21,10 +21,11 @@ DB.properties
 /dist/
 /nbdist/
 /.nb-gradle/
-DB.properties
+#/DB.properties
+/DB.properties
 ### VS Code ###
 .vscode/
-DB.properties
+
 ### Mac OS ###
 .DS_Store
-DB.properties
+/DB.properties
