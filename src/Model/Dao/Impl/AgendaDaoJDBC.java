@@ -44,8 +44,23 @@ public class AgendaDaoJDBC implements AgendaDao {
     }
 
     @Override
-    public void update(Agenda obj) {
-
+    public void update(Agenda obj, int id) {
+        PreparedStatement st=null;
+        try {
+            st=conn.prepareStatement(
+                    "UPDATE dados "
+                        +"Set nome=?,telefone=?"
+                        +"where Id=?");
+            st.setString(1,obj.getNome());
+            st.setString(2,obj.getTelefone());
+            st.setInt(3,id);
+            st.executeUpdate();
+            
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
+        }finally {
+            DB.closeStatament(st);
+        }
     }
 
     @Override
@@ -54,9 +69,20 @@ public class AgendaDaoJDBC implements AgendaDao {
     }
 
     @Override
-    public void delete(Agenda obj) {
+    public void delete(Integer id) {
+        PreparedStatement st=null;
+        try {
+            st=conn.prepareStatement("DELETE from dados where Id =?");
+            st.setInt(1,id);
+            st.executeUpdate();
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }finally {
+            DB.closeStatament(st);
+        }
     }
+
 
     @Override
     public List<Agenda> findAll() {

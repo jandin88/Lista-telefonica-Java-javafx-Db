@@ -34,11 +34,7 @@ public class Agenda implements Serializable {
         Telefone = telefone;
     }
 
-    public Agenda(Integer id, String nome, String telfone) {
-        this.id = id;
-        this.nome = nome;
-        Telefone = telfone;
-    }
+
 
     @Override
     public String toString() {

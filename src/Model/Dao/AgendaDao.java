@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface AgendaDao {
     void insert(Agenda obj);
-    void update(Agenda obj);
+    void update(Agenda obj,int id);
     void findByName(Agenda obj);
-    void delete(Agenda obj);
+    void delete(Integer obj);
     List<Agenda>findAll();
 }
