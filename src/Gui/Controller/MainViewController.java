@@ -49,7 +49,9 @@ public class MainViewController implements Initializable {
             mainAcho.getChildren().add(mainMenu);
             mainAcho.getChildren().addAll(view.getChildren());
 
-        }catch (Exception e){}
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
 }

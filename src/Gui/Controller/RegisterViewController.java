@@ -1,6 +1,7 @@
 package Gui.Controller;
 
 import DB.DB;
+import Gui.Util.ValidNumber;
 import Gui.Util.alerts;
 import Model.Dao.Impl.AgendaDaoJDBC;
 import Model.Entities.Agenda;
@@ -26,16 +27,21 @@ public class RegisterViewController implements Initializable {
             Connection conn= DB.getConncection();
             String name=txtName.getText();
             String telefone=txtTelefone.getText();
+            if(ValidNumber.isValidPhoneNumber(telefone)&&!name.isEmpty()){
+                Agenda agenda= new Agenda();
+                agenda.setNome(name);
+                agenda.setTelefone(telefone);
+                AgendaDaoJDBC agendaDB= new AgendaDaoJDBC(conn);
+                agendaDB.insert(agenda);
+                JOptionPane.showMessageDialog(null, "Cadastrado");
+            }else{
+                alerts.showAlert("ERROR","Dados Invalido!", Alert.AlertType.WARNING);
 
-            Agenda agenda= new Agenda();
-            agenda.setNome(name);
-            agenda.setTelefone(telefone);
+            }
 
-            AgendaDaoJDBC agendaDB= new AgendaDaoJDBC(conn);
-            agendaDB.insert(agenda);
-            JOptionPane.showMessageDialog(null, "Cadastrado");
         }catch (Exception e){
-            alerts.showAlert("ERROR",e.getMessage(), Alert.AlertType.ERROR);
+            alerts.showAlert("ERROR", e.getMessage(), Alert.AlertType.WARNING);
+
         }
     }
 

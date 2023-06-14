@@ -49,7 +49,7 @@ public class AgendaDaoJDBC implements AgendaDao {
         try {
             st=conn.prepareStatement(
                     "UPDATE dados "
-                        +"Set nome=?,telefone=?"
+                        +"Set nome=?,telefone=? "
                         +"where Id=?");
             st.setString(1,obj.getNome());
             st.setString(2,obj.getTelefone());

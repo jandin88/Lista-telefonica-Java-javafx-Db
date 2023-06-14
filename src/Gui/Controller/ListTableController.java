@@ -1,6 +1,8 @@
 package Gui.Controller;
 
 import DB.DB;
+import Gui.Util.ValidNumber;
+import Gui.Util.alerts;
 import Model.Dao.Impl.AgendaDaoJDBC;
 import Model.Entities.Agenda;
 import Model.Service.AgendaSevice;
@@ -37,9 +39,10 @@ public class ListTableController implements Initializable {
         tableViewId.setCellValueFactory(new PropertyValueFactory<>("Id"));
         tableViewNome.setCellValueFactory(new PropertyValueFactory<>("Nome"));
         tableViewTelefone.setCellValueFactory(new PropertyValueFactory<>("Telefone"));
-
-        updateTableView();
+        editValueTableView();
         eventClickList(agendaTableView);
+        updateTableView();
+
 
     }
     public void updateTableView(){
@@ -67,9 +70,7 @@ public class ListTableController implements Initializable {
 
                     dialog.setResultConverter(buttonType -> {
                         if(buttonType==updateButton){
-                            int id= lineSelect.getId();
                             editValueTableView();
-                            updateList(lineSelect,id);
 
                         } else if (buttonType==deleteButton) {
                             int id =lineSelect.getId();
@@ -94,23 +95,43 @@ public class ListTableController implements Initializable {
         agendaDaoJDBC.update(agenda,id);
         updateTableView();
     }
-    public void editValueTableView(){
 
+    public void editValueTableView() {
         agendaTableView.setEditable(true);
         tableViewNome.setCellFactory(TextFieldTableCell.forTableColumn());
         tableViewNome.setOnEditCommit(event -> {
             String newValue = event.getNewValue();
-            Agenda agenda = event.getRowValue();
+
+            TablePosition<Agenda, String> pos = event.getTablePosition();
+            int row = pos.getRow();
+
+            Agenda agenda = agendaTableView.getItems().get(row);
+
             agenda.setNome(newValue);
-        });
 
+            updateList(agenda, agenda.getId());
+
+            agendaTableView.refresh();
+        });
         tableViewTelefone.setCellFactory(TextFieldTableCell.forTableColumn());
-        tableViewTelefone.setOnEditCommit(event ->{
-            String newValue=event.getNewValue();
-            Agenda agenda=event.getRowValue();
-            agenda.setTelefone(newValue);
-        });
+        tableViewTelefone.setOnEditCommit(event -> {
 
+            String newValue = event.getNewValue();
+            TablePosition<Agenda, String> pos = event.getTablePosition();
+            int row = pos.getRow();
+
+            Agenda agenda = agendaTableView.getItems().get(row);
+
+            if(ValidNumber.isValidPhoneNumber(newValue)){
+                agenda.setTelefone(newValue);
+                updateList(agenda, agenda.getId());
+            }else {
+                alerts.showAlert("Error","Dados Invalido!", Alert.AlertType.WARNING);
+
+            }
+
+            agendaTableView.refresh();
+        });
 
     }
 
