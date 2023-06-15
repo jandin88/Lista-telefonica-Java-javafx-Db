@@ -15,10 +15,7 @@ import java.util.ResourceBundle;
 
 public class MainViewController implements Initializable {
 
-    @FXML
-    private Button btRegister;
-    @FXML
-    private Button btList;
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {}
@@ -31,6 +28,10 @@ public class MainViewController implements Initializable {
     @FXML
     public void onBtList(){
         loadView("/Gui/FXML/ListTable.fxml");
+    }
+    @FXML
+    public void onBtAbout(){
+        loadView("/Gui/FXML/AboutView.fxml");
     }
 
 

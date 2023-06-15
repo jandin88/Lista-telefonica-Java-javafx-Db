@@ -63,10 +63,7 @@ public class AgendaDaoJDBC implements AgendaDao {
         }
     }
 
-    @Override
-    public void findByName(Agenda obj) {
-
-    }
+   
 
     @Override
     public void delete(Integer id) {
@@ -82,7 +79,35 @@ public class AgendaDaoJDBC implements AgendaDao {
             DB.closeStatament(st);
         }
     }
+    
+    @Override
+    public List<Agenda> findByName(String nome) {
+        PreparedStatement st=null;
+        ResultSet rs=null;
+        try{
+            st=conn.prepareStatement(
+                    "SELECT * FROM agenda.dados WHERE nome=?");
 
+            st.setString(1,nome);
+            rs=st.executeQuery();
+            List<Agenda> list=new ArrayList<>();
+            while (rs.next()){
+                Agenda agenda=new Agenda();
+                agenda.setId(rs.getInt("id"));
+                agenda.setNome(rs.getString("nome"));
+                agenda.setTelefone(rs.getString("telefone"));
+                list.add(agenda);
+            }
+            return list;
+
+        }catch (SQLException e){
+            throw new DBException(e.getMessage());
+        }
+        finally {
+            DB.closeStatament(st);
+            DB.closeResultSet(rs);
+        }
+    }
 
     @Override
     public List<Agenda> findAll() {

@@ -31,19 +31,27 @@ public class ListTableController implements Initializable {
     private  TableColumn<Agenda, String> tableViewNome;
     @FXML
     private TableColumn<Agenda, String> tableViewTelefone;
+    @FXML
+    private TextField txtValueSerch;
 
+    public void onBtSerch(){
+        Connection conn=DB.getConncection();
+        AgendaDaoJDBC agendaDao=new AgendaDaoJDBC(conn);
 
-    public void onBtSerch(){}
+        List<Agenda>list = agendaDao.findByName(txtValueSerch.getText());
+        obsAgenda=FXCollections.observableList(list);
+        agendaTableView.setItems(obsAgenda);
+        agendaTableView.refresh();
+
+    }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         tableViewId.setCellValueFactory(new PropertyValueFactory<>("Id"));
         tableViewNome.setCellValueFactory(new PropertyValueFactory<>("Nome"));
         tableViewTelefone.setCellValueFactory(new PropertyValueFactory<>("Telefone"));
+        updateTableView();
         editValueTableView();
         eventClickList(agendaTableView);
-        updateTableView();
-
-
     }
     public void updateTableView(){
         AgendaSevice agendaSevice = new AgendaSevice();
@@ -67,7 +75,6 @@ public class ListTableController implements Initializable {
                     ButtonType cancelButton = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
 
                     dialog.getDialogPane().getButtonTypes().addAll(updateButton,deleteButton,cancelButton);
-
                     dialog.setResultConverter(buttonType -> {
                         if(buttonType==updateButton){
                             editValueTableView();
@@ -101,28 +108,24 @@ public class ListTableController implements Initializable {
         tableViewNome.setCellFactory(TextFieldTableCell.forTableColumn());
         tableViewNome.setOnEditCommit(event -> {
             String newValue = event.getNewValue();
-
-            TablePosition<Agenda, String> pos = event.getTablePosition();
-            int row = pos.getRow();
-
-            Agenda agenda = agendaTableView.getItems().get(row);
-
-            agenda.setNome(newValue);
-
-            updateList(agenda, agenda.getId());
-
-            agendaTableView.refresh();
+            if(!newValue.isEmpty()) {
+                TablePosition<Agenda, String> pos = event.getTablePosition();
+                int row = pos.getRow();
+                Agenda agenda = agendaTableView.getItems().get(row);
+                agenda.setNome(newValue);
+                updateList(agenda, agenda.getId());
+                agendaTableView.refresh();
+            }else alerts.showAlert("ERROR","O campo não pode ficar nulo", Alert.AlertType.WARNING);
         });
         tableViewTelefone.setCellFactory(TextFieldTableCell.forTableColumn());
         tableViewTelefone.setOnEditCommit(event -> {
 
             String newValue = event.getNewValue();
-            TablePosition<Agenda, String> pos = event.getTablePosition();
-            int row = pos.getRow();
-
-            Agenda agenda = agendaTableView.getItems().get(row);
-
             if(ValidNumber.isValidPhoneNumber(newValue)){
+                TablePosition<Agenda, String> pos = event.getTablePosition();
+                int row = pos.getRow();
+                Agenda agenda = agendaTableView.getItems().get(row);
+
                 agenda.setTelefone(newValue);
                 updateList(agenda, agenda.getId());
             }else {

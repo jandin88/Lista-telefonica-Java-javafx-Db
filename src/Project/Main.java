@@ -19,7 +19,7 @@ public class Main extends Application {
 
         mainScene=new Scene(scrollPane);
         primaryStage.setScene(mainScene);
-        primaryStage.setTitle("EX 4 banco de dados");
+        primaryStage.setTitle("Agenda Telefonica");
         primaryStage.show();
 
     }
